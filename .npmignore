@@ -1,0 +1,11 @@
+__tests__
+node_modules
+example
+src
+jest.config.js
+.travis.yml
+tsconfig.json
+tslint.json
+coverage
+.rts2*
+!dist/react-use-comlink.d.ts
