@@ -97,7 +97,7 @@ const App = () => {
 
 The api is pretty straightforward, you have the _in loco_ `useComlink`, the factory counter part `createComlink` and the singleton counter part `createComlinkSingleton`.
 
-### `useComlink<T = unknown>(initWorker: Blob | string | () => Worker | string | Blob, deps: any[]): { proxy<T>, worker }`
+#### `useComlink<T = unknown>(initWorker: Blob | string | () => Worker | string | Blob, deps: any[]): { proxy<T>, worker }`
 
 Use directly inside components. Both object and properties are memoized and can be used as deps.
 
@@ -107,7 +107,7 @@ const MyComponent: React.FC = () => {
 }
 ```
 
-### `createComlink<T = unknown>(initWorker: () => Worker | string | Blob, options = {}): () => { proxy<T>, worker }`
+#### `createComlink<T = unknown>(initWorker: () => Worker | string | Blob, options = {}): () => { proxy<T>, worker }`
 
 Creates a factory version that can spawn multiple workers with the same settings
 
@@ -131,7 +131,7 @@ const MyComponent: React.FC = () => {
 }
 ```
 
-### `createComlinkSingleton<T = unknown>(initWorker: Worker, options: WorkerOptions = {}): () => { proxy<T>, worker }`
+#### `createComlinkSingleton<T = unknown>(initWorker: Worker, options: WorkerOptions = {}): () => { proxy<T>, worker }`
 
 If you want to keep the same state between multiple components, be my guest. Not the best choice for modularity, but hey, I just make the tools. Notice that the worker is never terminated, and must be done on demand (on `worker.terminate()`)
 
@@ -162,6 +162,10 @@ Every function with Comlink is async (because you're basically communicating to 
 Although the worker will be terminated when the component is unmounted, your code might try to "set" the state of an unmounted component because of how workers work (:P) on their own separate thread in a truly async manner.
 
 In the future, when `react-cache` and Concurrent Mode is upon us, this library will be updated to work nicely with Suspense and the async nature of Comlink
+
+## Example
+
+Run `npm run example` from root then open `http://localhost:1234`
 
 ## TODO
 
