@@ -40,10 +40,8 @@ const App: React.FC<{startAt: number}> = (props) => {
   const [state, setState] = React.useState(0)
 
   const { proxy } = useComlink<typeof WorkerClass>(
-    () => {
-      return new Worker('./worker.ts')
-    },
-    [ props.someDep ]
+    () => new Worker('./worker.ts'),
+    [ props.startAt ] // used to recreate the worker if it change, defaults to []
   )
 
   React.useEffect(() => {
@@ -97,7 +95,7 @@ const App = () => {
 
 The api is pretty straightforward, you have the _in loco_ `useComlink`, the factory counter part `createComlink` and the singleton counter part `createComlinkSingleton`.
 
-#### `useComlink<T = unknown>(initWorker: Blob | string | () => Worker | string | Blob, deps: any[]): { proxy<T>, worker }`
+### useComlink<T = unknown>(initWorker: Blob | string | () => Worker | string | Blob, deps: any[]): { proxy<T>, worker }
 
 Use directly inside components. Both object and properties are memoized and can be used as deps.
 
@@ -107,7 +105,7 @@ const MyComponent: React.FC = () => {
 }
 ```
 
-#### `createComlink<T = unknown>(initWorker: () => Worker | string | Blob, options = {}): () => { proxy<T>, worker }`
+### createComlink<T = unknown>(initWorker: () => Worker | string | Blob, options = {}): () => { proxy<T>, worker }
 
 Creates a factory version that can spawn multiple workers with the same settings
 
@@ -131,7 +129,7 @@ const MyComponent: React.FC = () => {
 }
 ```
 
-#### `createComlinkSingleton<T = unknown>(initWorker: Worker, options: WorkerOptions = {}): () => { proxy<T>, worker }`
+### createComlinkSingleton<T = unknown>(initWorker: Worker, options: WorkerOptions = {}): () => { proxy<T>, worker }
 
 If you want to keep the same state between multiple components, be my guest. Not the best choice for modularity, but hey, I just make the tools. Notice that the worker is never terminated, and must be done on demand (on `worker.terminate()`)
 

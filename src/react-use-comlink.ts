@@ -1,7 +1,7 @@
 'use strict'
 
 import { useMemo, useEffect } from 'react'
-import { wrap, Remote } from 'comlink'
+import { wrap, Remote, releaseProxy } from 'comlink'
 
 export type WorkerTypes = Blob | string | ReturnWorkerTypes
 export type ReturnWorkerTypes = () => Exclude<WorkerTypes, ReturnWorkerTypes> | Worker
@@ -87,8 +87,12 @@ export function useComlink<
   }, deps)
 
   useEffect(() => {
+    const innerProxy = instance.proxy
     const innerWorker = instance.worker
-    return () => innerWorker.terminate()
+    return () => {
+      (innerProxy as any)[releaseProxy]()
+      innerWorker.terminate()
+    }
   }, [instance])
 
   return instance
@@ -134,8 +138,12 @@ export function createComlink<
     }, [worker, proxy])
 
     useEffect(() => {
+      const innerProxy = instance.proxy
       const innerWorker = instance.worker
-      return () => innerWorker.terminate()
+      return () => {
+        (innerProxy as any)[releaseProxy]()
+        innerWorker.terminate()
+      }
     }, [instance])
 
     return instance

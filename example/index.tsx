@@ -34,8 +34,6 @@ const Main: React.FC<{ startAt: number }> = (props) => {
       <hr />
       {unmounted ? null : <Sub />}
       <hr />
-      {/* <Sub /> */}
-      <hr />
       <button onClick={toggleUnmount}>{unmounted ? 'Mount Sub' : 'Unmount Sub'}</button>
     </div>
   )
